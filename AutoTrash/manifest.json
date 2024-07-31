@@ -1,0 +1,10 @@
+﻿{
+  "Name": "Auto Trash",
+  "Author": "focustense",
+  "Version": "0.1.0",
+  "Description": "Put trash items where they belong, in the trash",
+  "UniqueID": "focustense.AutoTrash",
+  "EntryDll": "AutoTrash.dll",
+  "MinimumApiVersion": "4.0.5",
+  "UpdateKeys": []
+}
