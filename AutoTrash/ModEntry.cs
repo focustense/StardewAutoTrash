@@ -1,6 +1,6 @@
 ﻿using StardewModdingAPI;
 
-namespace SupplyChain;
+namespace AutoTrash2;
 
 internal sealed class ModEntry : Mod
 {

@@ -1,10 +1,10 @@
 ﻿{
-  "Name": "Auto Trash",
+  "Name": "Garbage In Garbage Can",
   "Author": "focustense",
   "Version": "0.1.0",
-  "Description": "Put trash items where they belong, in the trash",
-  "UniqueID": "focustense.AutoTrash",
-  "EntryDll": "AutoTrash.dll",
+  "Description": "Put trash items where they belong, in the trash.",
+  "UniqueID": "focustense.AutoTrash2",
+  "EntryDll": "AutoTrash2.dll",
   "MinimumApiVersion": "4.0.5",
   "UpdateKeys": []
 }
