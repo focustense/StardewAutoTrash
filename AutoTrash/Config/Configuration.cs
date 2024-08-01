@@ -41,8 +41,7 @@ internal class Configuration
     public int MinEmptySlots { get; set; } = 0;
 
     /// <summary>
-    /// Number of seconds during which the most recently-trashed item can be recovered, after which it is destroyed
-    /// permanently.
+    /// Time limit during which a recently-trashed item can be recovered, after which it is lost permanently.
     /// </summary>
-    public int RecoveryLimitSeconds { get; set; } = 5;
+    public TimeSpan RecoveryLimit { get; set; } = TimeSpan.FromSeconds(5);
 }

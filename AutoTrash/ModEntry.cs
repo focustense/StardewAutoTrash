@@ -9,6 +9,7 @@ using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewUI;
 using StardewValley;
+using StardewValley.Menus;
 
 namespace AutoTrash2;
 
@@ -19,6 +20,7 @@ internal sealed class ModEntry : Mod
     // Initialized in Entry
     private Configuration config = null!;
     private Harmony harmony = null!;
+    private RecoveryBin recoveryBin = null!;
 
     private TrashData currentData = new();
     private TimeSpan lastTrashSoundTime = TimeSpan.Zero;
@@ -30,7 +32,8 @@ internal sealed class ModEntry : Mod
         I18n.Init(helper.Translation);
         config = helper.ReadConfig<Configuration>();
         Sprites.ModMenuTexture = helper.ModContent.Load<Texture2D>("assets/menu.png");
-        harmony = new(ModManifest.UniqueID);
+
+        recoveryBin = new(() => config.RecoveryLimit);
 
         helper.Events.GameLoop.GameLaunched += GameLoop_GameLaunched;
         helper.Events.GameLoop.SaveLoaded += GameLoop_SaveLoaded;
@@ -42,6 +45,7 @@ internal sealed class ModEntry : Mod
         InventoryInterceptor.ConfigSelector = () => config;
         InventoryInterceptor.DataSelector = () => currentData;
 
+        harmony = new(ModManifest.UniqueID);
         harmony.Patch(
             original: AccessTools.Method(typeof(Utility), nameof(Utility.trashItem)),
             postfix: new(typeof(TrashDetector), nameof(TrashDetector.Utility_trashItem_Postfix)));
@@ -50,6 +54,10 @@ internal sealed class ModEntry : Mod
             postfix: new(
                 typeof(InventoryInterceptor),
                 nameof(InventoryInterceptor.Farmer_GetItemReceiveBehavior_Postfix)));
+        harmony.Patch(
+            original: AccessTools.Method(typeof(InventoryPage), nameof(InventoryPage.receiveLeftClick)),
+            prefix: new(typeof(TrashDetector), nameof(TrashDetector.InventoryPage_receiveLeftClick_Prefix)),
+            postfix: new(typeof(TrashDetector), nameof(TrashDetector.InventoryPage_receiveLeftClick_Postfix)));
     }
 
     private void GameLoop_GameLaunched(object? sender, GameLaunchedEventArgs e)
@@ -76,16 +84,26 @@ internal sealed class ModEntry : Mod
 
     private void GameLoop_UpdateTicked(object? sender, UpdateTickedEventArgs e)
     {
+        if (!Context.IsWorldReady)
+        {
+            return;
+        }
+        if (Context.IsPlayerFree)
+        {
+            recoveryBin.Trim(Game1.currentGameTime.ElapsedGameTime);
+        }
         TrackNewTrashables();
         TrashPendingItems();
+        if (TrashDetector.IsRecoveryRequested)
+        {
+            ShowRecoveryMenu();
+            TrashDetector.IsRecoveryRequested = false;
+        }
     }
 
     private void Input_ButtonsChanged(object? sender, ButtonsChangedEventArgs e)
     {
-        if (Game1.player.CanMove
-            && !Game1.freezeControls
-            && Game1.activeClickableMenu is null
-            && config.MenuKey.JustPressed())
+        if (Context.IsPlayerFree && config.MenuKey.JustPressed())
         {
             ShowTrashMenu();
             Helper.Input.SuppressActiveKeybinds(config.MenuKey);
@@ -103,7 +121,16 @@ internal sealed class ModEntry : Mod
         // permissive `MinEmptySlots`, and subsequently going over that limit with non-trash items. Harmony patches for
         // the Farmer already cover the scenario of "blocking" trash items from getting into the inventory when the
         // empty slot minimum is not configured or when a non-stackable trash item would go above the limit.
-        if (config.MinEmptySlots <= 0 || !e.Added.Any())
+        if (!e.Added.Any())
+        {
+            return;
+        }
+        // If an item was just recovered, remove its marker flag so that it's not skipped again.
+        foreach (var added in e.Added)
+        {
+            added.tempData?.Remove(InventoryInterceptor.SKIP_TRASH_CHECK_KEY);
+        }
+        if (config.MinEmptySlots <= 0)
         {
             return;
         }
@@ -148,6 +175,7 @@ internal sealed class ModEntry : Mod
         {
             Game1.player.Money += reclamationPrice;
         }
+        recoveryBin.Add(item);
         if (config.EnableTrashNotification)
         {
             // Unlike the notification in TrackTrashedItems, we actually want to use the specific name of the item here
@@ -169,6 +197,25 @@ internal sealed class ModEntry : Mod
             Game1.playSound("trashcan");
             lastTrashSoundTime = gameTime;
         }
+    }
+
+    private void OnItemRecovered(Item item)
+    {
+        var reclamationPrice = Utility.getTrashReclamationPrice(item, Game1.player);
+        if (reclamationPrice > 0)
+        {
+            Game1.player.Money -= reclamationPrice;
+        }
+    }
+
+    private void ShowRecoveryMenu()
+    {
+        if (recoveryBin.IsEmpty())
+        {
+            Game1.addHUDMessage(new(I18n.Hud_RecoveryUnavailable(), HUDMessage.error_type));
+            return;
+        }
+        Game1.activeClickableMenu = new RecoveryMenu(recoveryBin.GetItems(), OnItemRecovered);
     }
 
     private void ShowTrashMenu()

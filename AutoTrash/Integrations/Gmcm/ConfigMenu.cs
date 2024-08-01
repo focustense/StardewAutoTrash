@@ -48,5 +48,14 @@ internal static class ConfigMenu
             min: 0,
             max: 12,
             formatValue: count => count > 0 ? count.ToString() : I18n.Options_MinEmptySlots_Disabled());
+        gmcm.AddNumberOption(
+            mod,
+            name: I18n.Options_RecoveryTime_Label,
+            tooltip: I18n.Options_RecoveryTime_Tooltip,
+            getValue: () => (int)config().RecoveryLimit.TotalSeconds,
+            setValue: value => config().RecoveryLimit = TimeSpan.FromSeconds(value),
+            min: 0,
+            max: 10,
+            formatValue: value => I18n.Options_RecoveryTime_ValueFormat(value));
     }
 }
