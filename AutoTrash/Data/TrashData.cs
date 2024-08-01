@@ -16,6 +16,19 @@ internal class TrashData
     public TrashFilter GlobalFilter { get; set; } = new();
 
     /// <summary>
+    /// Returns a sequence of all item IDs tracked in any location/filter. Used for UI.
+    /// </summary>
+    /// <remarks>
+    /// Must concatenate and dedupe, so don't call every frame.
+    /// </remarks>
+    public IEnumerable<string> GetAllItemIds()
+    {
+        return GlobalFilter.ItemIds
+            .Concat(FiltersByLocationName.Values.SelectMany(filter => filter.ItemIds))
+            .Distinct();
+    }
+
+    /// <summary>
     /// Checks whether or not a given item is considered trash.
     /// </summary>
     /// <param name="locationName">Unique name of the current location.</param>
@@ -26,6 +39,28 @@ internal class TrashData
     {
         return GlobalFilter.ItemIds.Contains(itemId)
             || (FiltersByLocationName.TryGetValue(locationName, out var filter) && filter.ItemIds.Contains(itemId));
+    }
+
+    /// <summary>
+    /// Marks an item as trash (or not trash) for all locations.
+    /// </summary>
+    /// <remarks>
+    /// The setting is independent of location-specific settings configured by <see cref="SetTrashFlag"/>, so toggling
+    /// this on and off won't erase previous location settings.
+    /// </remarks>
+    /// <param name="itemId">Qualified ID of the item to flag.</param>
+    /// <param name="isTrash">Whether or not item's with the specified <paramref name="itemId"/> should be considered
+    /// trash.</param>
+    public void SetGlobalTrashFlag(string itemId, bool isTrash)
+    {
+        if (isTrash)
+        {
+            GlobalFilter.ItemIds.Add(itemId);
+        }
+        else
+        {
+            GlobalFilter.ItemIds.Remove(itemId);
+        }
     }
 
     /// <summary>

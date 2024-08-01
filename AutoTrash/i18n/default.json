@@ -1,4 +1,15 @@
 {
-  "Hud.ItemFlagged": "{{itemName}} flagged as garbage",
-  "Hud.ItemTrashed": "{{itemName}} (Discarded)"
+  "Button.LeftClick": "Left click",
+  "Button.RightClick": "Right click",
+  "Hud.ItemFlagged": "{{itemName}} flagged as trash",
+  "Hud.ItemTrashed": "{{itemName}} (Discarded)",
+  "Options.ModifierKey.Label": "Modifier Key",
+  "Options.ModifierKey.Tooltip": "Key or button to hold while trashing an item to designate that item as trash.",
+  "TrashMenu.Title": "Trash Settings for {{locationName}}",
+  "TrashMenu.EmptyText": "Trash list is empty for this location. To designate an item as trash, use the inventory menu to drop an item in the trash while holding the {{modifierKeyName}} ({{modifierKey}}).",
+  "TrashMenu.Legend.Title": "Legend:",
+  "TrashMenu.Legend.Global": "Trash in all locations",
+  "TrashMenu.Legend.Local": "Trash in this location",
+  "TrashMenu.Item.Tooltip.Toggle.Local": "{{button}} to toggle for this location",
+  "TrashMenu.Item.Tooltip.Toggle.Global": "{{button}} to toggle for all locations"
 }

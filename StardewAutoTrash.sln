@@ -5,6 +5,8 @@ VisualStudioVersion = 17.9.34622.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoTrash2", "AutoTrash\AutoTrash2.csproj", "{D3F21F39-7D80-4BE2-B12B-BB1E8FCD7C7B}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "StardewUI", "StardewUI\StardewUI.shproj", "{D3DBB38B-79AF-4B84-B425-1CFFDEFA7A86}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,5 +23,9 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0DEC9BF7-DD0A-47BB-B138-5B82549B9530}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		StardewUI\StardewUI.projitems*{d3dbb38b-79af-4b84-b425-1cffdefa7a86}*SharedItemsImports = 13
+		StardewUI\StardewUI.projitems*{d3f21f39-7d80-4be2-b12b-bb1e8fcd7c7b}*SharedItemsImports = 5
 	EndGlobalSection
 EndGlobal

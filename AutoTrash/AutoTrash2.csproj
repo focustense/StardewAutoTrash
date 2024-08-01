@@ -15,7 +15,14 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <None Remove="assets\menu.png" />
 	  <None Remove="i18n\default.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="assets\menu.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -26,4 +33,6 @@
 	</ItemGroup>
 
 	<ProjectExtensions><VisualStudio><UserProperties manifest_1json__JsonSchema="https://smapi.io/schemas/manifest.json" /></VisualStudio></ProjectExtensions>
+
+	<Import Project="..\StardewUI\StardewUI.projitems" Label="Shared" />
 </Project>

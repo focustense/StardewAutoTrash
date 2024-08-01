@@ -1,8 +1,11 @@
 ﻿using AutoTrash2.Config;
 using AutoTrash2.Data;
+using AutoTrash2.UI;
 using HarmonyLib;
+using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
+using StardewUI;
 using StardewValley;
 
 namespace AutoTrash2;
@@ -20,8 +23,11 @@ internal sealed class ModEntry : Mod
 
     public override void Entry(IModHelper helper)
     {
+        Logger.Monitor = Monitor;
+
         I18n.Init(helper.Translation);
         config = helper.ReadConfig<Configuration>();
+        Sprites.ModMenuTexture = helper.ModContent.Load<Texture2D>("assets/menu.png");
         harmony = new(ModManifest.UniqueID);
 
         helper.Events.GameLoop.SaveLoaded += GameLoop_SaveLoaded;
@@ -67,7 +73,7 @@ internal sealed class ModEntry : Mod
             && Game1.activeClickableMenu is null
             && config.MenuKey.JustPressed())
         {
-            Monitor.Log("Menu button pressed", LogLevel.Info);
+            ShowTrashMenu();
             Helper.Input.SuppressActiveKeybinds(config.MenuKey);
         }
         TrashDetector.Detecting = config.ModifierKey.IsDown();
@@ -98,6 +104,11 @@ internal sealed class ModEntry : Mod
                 number = item.Stack,
             });
         }
+    }
+
+    private void ShowTrashMenu()
+    {
+        Game1.activeClickableMenu = new TrashMenu(config, currentData, Game1.currentLocation);
     }
 
     private void TrackNewTrashables()

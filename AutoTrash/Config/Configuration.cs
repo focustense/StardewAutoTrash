@@ -27,4 +27,10 @@ internal class Configuration
     /// Key to hold down when trashing an item for the first time to make it auto-trashable.
     /// </summary>
     public KeybindList ModifierKey { get; set; } = new(SButton.LeftControl);
+
+    /// <summary>
+    /// Number of seconds during which the most recently-trashed item can be recovered, after which it is destroyed
+    /// permanently.
+    /// </summary>
+    public int RecoveryLimitSeconds { get; set; } = 5;
 }
