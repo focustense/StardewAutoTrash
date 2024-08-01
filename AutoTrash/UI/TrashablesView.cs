@@ -23,10 +23,13 @@ internal class TrashablesView(Configuration config, TrashData data, GameLocation
     {
         var content = CreateItemGridOrEmptyText();
         var legend = CreateLegend();
+        var viewportSize = Game1.uiViewport.Size;
+        var menuWidth = MathF.Min(880, viewportSize.Width / 2);
+        var menuHeight = MathF.Min(540, viewportSize.Height / 2);
         return new ScrollableFrameView()
         {
             Name = "TrashablesRoot",
-            FrameLayout = LayoutParameters.FixedSize(1280, 800),
+            FrameLayout = LayoutParameters.FixedSize(menuWidth, menuHeight),
             Title = I18n.TrashMenu_Title(Location.DisplayName),
             Content = content,
             Footer = legend,

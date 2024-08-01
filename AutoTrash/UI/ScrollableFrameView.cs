@@ -92,7 +92,7 @@ internal class ScrollableFrameView : WrapperView
         banner = new Banner()
         {
             Layout = LayoutParameters.FitContent(),
-            Margin = new(Top: -80),
+            Margin = new(Top: -85),
             Padding = new(12),
             Background = Sprites.BannerBackground,
             BackgroundBorderThickness = (Sprites.BannerBackground.FixedEdges ?? Edges.NONE)
@@ -128,12 +128,12 @@ internal class ScrollableFrameView : WrapperView
             Name = "ScrollableFrameScrollingLayout",
             Layout = LayoutParameters.FitContent(),
             Children = [leftSpacer, contentFrame, scrollbar],
+            ZIndex = 1,
         };
         footerContainer = new Panel()
         {
             Name = "ScrollableFrameFooter",
             Layout = LayoutParameters.FitContent(),
-            ZIndex = 1,
         };
         return new Panel()
         {
