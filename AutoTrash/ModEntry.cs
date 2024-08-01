@@ -1,5 +1,7 @@
 ﻿using AutoTrash2.Config;
 using AutoTrash2.Data;
+using AutoTrash2.Integrations;
+using AutoTrash2.Integrations.Gmcm;
 using AutoTrash2.UI;
 using HarmonyLib;
 using Microsoft.Xna.Framework.Graphics;
@@ -30,6 +32,7 @@ internal sealed class ModEntry : Mod
         Sprites.ModMenuTexture = helper.ModContent.Load<Texture2D>("assets/menu.png");
         harmony = new(ModManifest.UniqueID);
 
+        helper.Events.GameLoop.GameLaunched += GameLoop_GameLaunched;
         helper.Events.GameLoop.SaveLoaded += GameLoop_SaveLoaded;
         helper.Events.GameLoop.Saving += GameLoop_Saving;
         helper.Events.GameLoop.UpdateTicked += GameLoop_UpdateTicked;
@@ -46,6 +49,16 @@ internal sealed class ModEntry : Mod
             postfix: new(
                 typeof(InventoryInterceptor),
                 nameof(InventoryInterceptor.Farmer_GetItemReceiveBehavior_Postfix)));
+    }
+
+    private void GameLoop_GameLaunched(object? sender, GameLaunchedEventArgs e)
+    {
+        Apis.LoadAll(Helper.ModRegistry);
+        ConfigMenu.Register(
+            ModManifest,
+            config: () => config,
+            reset: () => config = new(),
+            save: () => Helper.WriteConfig(config));
     }
 
     // Event handlers
