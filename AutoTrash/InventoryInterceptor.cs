@@ -43,7 +43,7 @@ internal static class InventoryInterceptor
             return;
         }
         var locationName = Game1.currentLocation.NameOrUniqueName;
-        if (data.IsTrash(locationName, item.QualifiedItemId))
+        if (data.IsTrash(locationName, item.QualifiedItemId) && !IsAllowedByEmptySlotRule(item, config.MinEmptySlots))
         {
             // Farmer has many different "addItemToInventory" methods but they all have similar logic, in which they
             // check the result of needsInventorySpace and go directly to OnItemReceived if it's false, skipping all the
@@ -57,7 +57,39 @@ internal static class InventoryInterceptor
                 showNotification = false;
             }
 
-            InterceptedItems.Add(item);
+            // GetItemReceiveBehavior is a "query" method that can be called multiple times in a single "receive", so we
+            // must avoid double-counting.
+            //
+            // Making InterceptedItems a HashSet could make this theoretically faster, but we'd rather preserve ordering
+            // and the list should generally have 0 or 1 items (and no more than a few, even in unusual scenarios).
+            if (!InterceptedItems.Contains(item))
+            {
+                InterceptedItems.Add(item);
+            }
         }
+    }
+
+    private static bool IsAllowedByEmptySlotRule(Item item, int minEmptySlots)
+    {
+        if (minEmptySlots == 0)
+        {
+            return false;
+        }
+        var maxSlots = Game1.player.MaxItems;
+        var occupiedSlots = Game1.player.Items.CountItemStacks();
+        var availableSlots = maxSlots - occupiedSlots;
+        // If we are still above the empty slot threshold then there is no point in doing a potentially expensive
+        // stacking check, since the item cannot consume more than one additional slot no matter how big its stack is.
+        if (availableSlots > minEmptySlots)
+        {
+            return true;
+        }
+        // Otherwise, we have to check existing stacks to see if this item would result in occupying another slot.
+        // Note, this allows continuous stacking of trash items even while the available slot count might already be
+        // below the limit; we expect the explicit freeing-up to be done by the InventoryChanged handler in ModEntry.
+        var availableStack = Game1.player.Items
+            .Where(i => i?.canStackWith(item) == true)
+            .Sum(i => i.maximumStackSize() - i.Stack);
+        return item.Stack <= availableStack;
     }
 }

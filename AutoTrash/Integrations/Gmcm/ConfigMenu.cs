@@ -39,5 +39,14 @@ internal static class ConfigMenu
             tooltip: () => I18n.Options_TrashNotifications_Tooltip(I18n.Options_SuppressPickupNotifications_Label()),
             getValue: () => config().EnableTrashNotification,
             setValue: value => config().EnableTrashNotification = value);
+        gmcm.AddNumberOption(
+            mod,
+            name: I18n.Options_MinEmptySlots_Label,
+            tooltip: I18n.Options_MinEmptySlots_Tooltip,
+            getValue: () => config().MinEmptySlots,
+            setValue: value => config().MinEmptySlots = value,
+            min: 0,
+            max: 12,
+            formatValue: count => count > 0 ? count.ToString() : I18n.Options_MinEmptySlots_Disabled());
     }
 }

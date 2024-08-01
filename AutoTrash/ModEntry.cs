@@ -37,6 +37,7 @@ internal sealed class ModEntry : Mod
         helper.Events.GameLoop.Saving += GameLoop_Saving;
         helper.Events.GameLoop.UpdateTicked += GameLoop_UpdateTicked;
         helper.Events.Input.ButtonsChanged += Input_ButtonsChanged;
+        helper.Events.Player.InventoryChanged += Player_InventoryChanged;
 
         InventoryInterceptor.ConfigSelector = () => config;
         InventoryInterceptor.DataSelector = () => currentData;
@@ -92,6 +93,47 @@ internal sealed class ModEntry : Mod
         TrashDetector.Detecting = config.ModifierKey.IsDown();
     }
 
+    private void Player_InventoryChanged(object? sender, InventoryChangedEventArgs e)
+    {
+        // We don't actually have to abort if items are only being removed and not added; however, it seems confusing to
+        // start trashing items in the inventory just because the player dropped/trashed a different item. To keep the
+        // behavior easy to understand, only start trashing when the inventory is filling up.
+        //
+        // Note that this method is only concerned with trash items that were already in the player's inventory due to a
+        // permissive `MinEmptySlots`, and subsequently going over that limit with non-trash items. Harmony patches for
+        // the Farmer already cover the scenario of "blocking" trash items from getting into the inventory when the
+        // empty slot minimum is not configured or when a non-stackable trash item would go above the limit.
+        if (config.MinEmptySlots <= 0 || !e.Added.Any())
+        {
+            return;
+        }
+        var inventory = Game1.player.Items;
+        var maxSlots = Game1.player.MaxItems;
+        var occupiedSlots = inventory.CountItemStacks();
+        var availableSlots = maxSlots - occupiedSlots;
+        var locationName = Game1.currentLocation.NameOrUniqueName;
+        bool wasAnyTrashed = false;
+        for (int i = inventory.Count - 1; i >= 0 && availableSlots < config.MinEmptySlots; i--)
+        {
+            var currentItem = inventory[i];
+            if (currentItem is null)
+            {
+                continue;
+            }
+            if (currentData.IsTrash(locationName, currentItem.QualifiedItemId))
+            {
+                inventory[i] = null;
+                InternalTrashItem(currentItem);
+                availableSlots++;
+                wasAnyTrashed = true;
+            }
+        }
+        if (wasAnyTrashed)
+        {
+            MaybePlayTrashSound();
+        }
+    }
+
     // Core logic
 
     private void InternalTrashItem(Item item)
@@ -116,6 +158,16 @@ internal sealed class ModEntry : Mod
                 messageSubject = item,
                 number = item.Stack,
             });
+        }
+    }
+
+    private void MaybePlayTrashSound()
+    {
+        var gameTime = Game1.currentGameTime.TotalGameTime;
+        if (gameTime - lastTrashSoundTime >= MIN_TRASH_SOUND_INTERVAL)
+        {
+            Game1.playSound("trashcan");
+            lastTrashSoundTime = gameTime;
         }
     }
 
@@ -157,11 +209,6 @@ internal sealed class ModEntry : Mod
             InternalTrashItem(item);
         }
         InventoryInterceptor.InterceptedItems.Clear();
-        var gameTime = Game1.currentGameTime.TotalGameTime;
-        if (gameTime - lastTrashSoundTime >= MIN_TRASH_SOUND_INTERVAL)
-        {
-            Game1.playSound("trashcan");
-            lastTrashSoundTime = gameTime;
-        }
+        MaybePlayTrashSound();
     }
 }
