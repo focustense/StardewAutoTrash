@@ -45,10 +45,12 @@ When you start a new game or first install the mod, initially your trash filter 
 To add an item to the filter - that is, to designate it as trash - simply trash it the normal way, i.e. by dropping it into your trash can from the inventory menu, while holding the [configured](#configuration) Modifier Key (default: <kbd>LeftControl</kbd>). You'll see a notification:
 
 <img align="left" src="docs/images/flagged-notification.png" alt="Notification showing item flagged as trash" />
+<br clear="left"/>
 
 Afterward, any time you "pick up" this item, it will automatically get sent to the trash. It will still count as a pickup for the purposes of quests, mail, etc., but it will not appear in your inventory. If you haven't disabled trash notifications, you'll receive a separate notification when this happens:
 
 <img align="left" src="docs/images/trash-notification.png" alt="Notification showing auto-discarded item" />
+<br clear="left"/>
 
 This is the mod working as intended. You'll also be credited any money you'd get for trashing the item normally, i.e. based on your trash can's upgrade level.
 
@@ -59,10 +61,12 @@ You might run into situations where items that you intended to keep get trashed 
 To open the recovery menu, hover over the trash can in your inventory menu **without** holding any item, like so:
 
 <img align="left" src="docs/images/trash-can-hover.png" alt="Cursor hovered over trash can" />
+<br clear="left"/>
 
 Then, while holding the same Modifier Key that you use for [marking items](#marking-items-as-trash), click on the can or press the controller's action button (A). If any items are still available, you'll be presented with the recovery menu:
 
 <img align="left" src="docs/images/recovery-menu.png" alt="Recovery menu showing trashed items and current inventory" />
+<br clear="left"/>
 
 This menu acts similar to any other container, such as a chest, but you can't put items back. Once you take an item/stack, it will go back in your inventory and you'll lose the money you were credited for trashing it.
 
@@ -75,6 +79,7 @@ Items recovered this way are _temporarily_ exempt from trash rules; they will no
 If you waited too long to recover the items, or if you've disabled this feature entirely, then you won't get the recovery menu, and will instead see a notification:
 
 <img align="left" src="docs/images/no-recovery-notification.png" alt="Notification showing that no recovery is available" />
+<br clear="left"/>
 
 This means you've passed the point of no return; any items that were previously trashed are gone forever and cannot be recovered.
 
@@ -90,6 +95,7 @@ Depending on the situation, you may want to do one of the following:
 These can be done in the Trash Menu, which can be brought up by pressing the Menu Key (default <kbd>G</kbd>):
 
 <img align="left" src="docs/images/trash-menu.png" alt="Menu where trash items can be configured" />
+<br clear="left"/>
 
 Most of this should content should be self-explanatory... but just in case:
 
@@ -108,6 +114,7 @@ Cautious cats may want to avoid trashing any items until they actually need the 
 If you've decided to be a cautious cat, let GIG know by setting your Minimum Empty Slots to something other than zero:
 
 <img align="left" src="docs/images/config-menu-empty-slots.png" alt="Config menu with empty slots set" />
+<br clear="left"/>
 
 The way this actually works in-game is as follows:
 
