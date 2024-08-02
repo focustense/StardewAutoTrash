@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.1.6] - 2024-08-02
+
 ### Added
 
 - Initial release.
@@ -17,4 +19,5 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Save game persistence.
 - [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098) pages for global settings like key bindings and notifications.
 
-[Unreleased]: https://github.com/focustense/StardewAutoTrash/tree/HEAD
+[Unreleased]: https://github.com/focustense/StardewAutoTrash/compare/v0.1.0...HEAD
+[0.1.0-alpha]: https://github.com/focustense/StardewAutoTrash/tree/v0.1.0
