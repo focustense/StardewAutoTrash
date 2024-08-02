@@ -30,7 +30,7 @@ internal class TrashablesView(Configuration config, TrashData data, GameLocation
         {
             Name = "TrashablesRoot",
             FrameLayout = LayoutParameters.FixedSize(menuWidth, menuHeight),
-            Title = I18n.TrashMenu_Title(Location.DisplayName),
+            Title = I18n.TrashMenu_Title(Location.GetPathText()),
             Content = content,
             Footer = legend,
         };
