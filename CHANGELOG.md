@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.1.1] - 2024-08-02
+
 ### Fixed
 
 - Trash filters now carry over properly between different levels of the same mine or volcano dungeon.
@@ -23,5 +25,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Save game persistence.
 - [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098) pages for global settings like key bindings and notifications.
 
-[Unreleased]: https://github.com/focustense/StardewAutoTrash/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/focustense/StardewAutoTrash/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/focustense/StardewAutoTrash/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/focustense/StardewAutoTrash/tree/v0.1.0
