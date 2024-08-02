@@ -26,7 +26,7 @@ Garbage In Garbage [Can], or GIGc, or just GIG, takes the items *you* consider t
 GIG follows the standard installation procedure for most mods:
 
 1. Install SMAPI and set up your game for mods, per the [Modding: Player's Guide](https://stardewvalleywiki.com/Modding:Player_Guide/Getting_Started) instructions.
-2. Download the [latest release](https://github.com/focustense/StardewRadialMenu/releases). Make sure you download the `GarbageInGarbageCan x.y.z.zip` file, **not** the source code.
+2. Download the [latest release](https://github.com/focustense/StardewAutoTrash/releases). Make sure you download the `GarbageInGarbageCan x.y.z.zip` file, **not** the source code.
 3. Open the .zip file and extract the `GarbageInGarbageCan` folder into your `Stardew Valley\Mods` folder.
 4. Launch the game!
 
@@ -173,7 +173,7 @@ All of this mod's options are configurable through GMCM. If you prefer to edit t
 
 Feel free to either:
 
-* Create a [GitHub issue](https://github.com/focustense/StardewRadialMenu/issues); when doing so, please follow bug-reporting etiquette. Check first for similar reports, and make sure to include all relevant details about your issue, especially including clear repro steps and/or [SMAPI log](https://smapi.io/log).
+* Create a [GitHub issue](https://github.com/focustense/StardewAutoTrash/issues); when doing so, please follow bug-reporting etiquette. Check first for similar reports, and make sure to include all relevant details about your issue, especially including clear repro steps and/or [SMAPI log](https://smapi.io/log).
 * Or, ping me on the [SV Discord](https://discord.com/invite/stardewvalley) if I happen to be around. Discord is best if you have a quick question, but I make no promises re: availability for in-depth troubleshooting.
 
 ## See Also
