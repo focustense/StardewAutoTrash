@@ -1,0 +1,16 @@
+﻿{
+  "Name": "Garbage In Garbage Can",
+  "Author": "focustense",
+  "Version": "0.1.0",
+  "Description": "Put trash items where they belong, in the trash.",
+  "UniqueID": "focustense.GarbageInGarbageCan",
+  "EntryDll": "GarbageInGarbageCan.dll",
+  "Dependencies": [
+    {
+      "UniqueID": "spacechase0.GenericModConfigMenu",
+      "IsRequired": false
+    }
+  ],
+  "MinimumApiVersion": "4.0.5",
+  "UpdateKeys": [ "Nexus:26607", "GitHub:focustense/StardewAutoTrash" ]
+}
