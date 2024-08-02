@@ -63,7 +63,7 @@ To open the recovery menu, hover over the trash can in your inventory menu **wit
 <img align="left" src="docs/images/trash-can-hover.png" alt="Cursor hovered over trash can" />
 <br clear="left"/>
 
-Then, while holding the same Modifier Key that you use for [marking items](#marking-items-as-trash), click on the can or press the controller's action button (A). If any items are still available, you'll be presented with the recovery menu:
+Then, while holding the same Modifier Key that you use for [marking items](#mark-items-as-trash), click on the can or press the controller's action button (A). If any items are still available, you'll be presented with the recovery menu:
 
 <img align="left" src="docs/images/recovery-menu.png" alt="Recovery menu showing trashed items and current inventory" />
 <br clear="left"/>
