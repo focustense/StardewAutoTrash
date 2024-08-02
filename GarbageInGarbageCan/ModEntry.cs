@@ -139,7 +139,7 @@ internal sealed class ModEntry : Mod
         var maxSlots = Game1.player.MaxItems;
         var occupiedSlots = inventory.CountItemStacks();
         var availableSlots = maxSlots - occupiedSlots;
-        var locationName = Game1.currentLocation.NameOrUniqueName;
+        var locationKey = Game1.currentLocation.GetSemiUniqueKey();
         bool wasAnyTrashed = false;
         for (int i = inventory.Count - 1; i >= 0 && availableSlots < config.MinEmptySlots; i--)
         {
@@ -148,7 +148,7 @@ internal sealed class ModEntry : Mod
             {
                 continue;
             }
-            if (currentData.IsTrash(locationName, currentItem.QualifiedItemId))
+            if (currentData.IsTrash(locationKey, currentItem.QualifiedItemId))
             {
                 inventory[i] = null;
                 InternalTrashItem(currentItem);
@@ -240,10 +240,10 @@ internal sealed class ModEntry : Mod
         {
             return;
         }
-        var locationName = Game1.currentLocation.NameOrUniqueName;
+        var locationKey = Game1.currentLocation.GetSemiUniqueKey();
         foreach (var item in TrashDetector.DetectedItems)
         {
-            currentData.SetTrashFlag(locationName, item.QualifiedItemId, true);
+            currentData.SetTrashFlag(locationKey, item.QualifiedItemId, true);
             // The item's display name could be more specific than the item ID, and we don't want to confuse the player.
             // Use the generic name for any item with that ID.
             var itemName = ItemRegistry.Create(item.QualifiedItemId).DisplayName;

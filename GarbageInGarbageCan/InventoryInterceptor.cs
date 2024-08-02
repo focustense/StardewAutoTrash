@@ -46,8 +46,8 @@ internal static class InventoryInterceptor
         {
             return;
         }
-        var locationName = Game1.currentLocation.NameOrUniqueName;
-        if (data.IsTrash(locationName, item.QualifiedItemId) && !IsAllowedByEmptySlotRule(item, config.MinEmptySlots))
+        var locationKey = Game1.currentLocation.GetSemiUniqueKey();
+        if (data.IsTrash(locationKey, item.QualifiedItemId) && !IsAllowedByEmptySlotRule(item, config.MinEmptySlots))
         {
             // Farmer has many different "addItemToInventory" methods but they all have similar logic, in which they
             // check the result of needsInventorySpace and go directly to OnItemReceived if it's false, skipping all the

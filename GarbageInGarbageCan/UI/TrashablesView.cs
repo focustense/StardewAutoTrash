@@ -121,9 +121,10 @@ internal class TrashablesView(Configuration config, TrashData data, GameLocation
         }
         else
         {
-            var isLocalTrash = Data.FiltersByLocationName.TryGetValue(Location.NameOrUniqueName, out var filter)
+            var locationKey = Location.GetSemiUniqueKey();
+            var isLocalTrash = Data.FiltersByLocationName.TryGetValue(locationKey, out var filter)
                 && filter.ItemIds.Contains(itemData.QualifiedItemId);
-            Data.SetTrashFlag(Location.NameOrUniqueName, itemData.QualifiedItemId, !isLocalTrash);
+            Data.SetTrashFlag(locationKey, itemData.QualifiedItemId, !isLocalTrash);
         }
         UpdateGridItem(panel);
     }
@@ -131,7 +132,7 @@ internal class TrashablesView(Configuration config, TrashData data, GameLocation
     private void UpdateGridItem(Panel panel)
     {
         var itemData = panel.Tags.Get<ParsedItemData>()!;
-        var isLocalTrash = Data.FiltersByLocationName.TryGetValue(Location.NameOrUniqueName, out var filter)
+        var isLocalTrash = Data.FiltersByLocationName.TryGetValue(Location.GetSemiUniqueKey(), out var filter)
             && filter.ItemIds.Contains(itemData.QualifiedItemId);
         var isGlobalTrash = Data.GlobalFilter.ItemIds.Contains(itemData.QualifiedItemId);
         var isLocalOrGlobalTrash = isLocalTrash || isGlobalTrash;

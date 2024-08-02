@@ -2,6 +2,7 @@
 using StardewValley.Buildings;
 using StardewValley.GameData.Buildings;
 using StardewValley.GameData.Locations;
+using StardewValley.Locations;
 using StardewValley.TokenizableStrings;
 using System.Text;
 
@@ -14,11 +15,33 @@ internal static class LocationExtensions
 {
     private const string NameSeparator = " > ";
 
+    /// <summary>
+    /// Formats the full hierarchical path of a location, e.g. "Johnson Farm > Farmhouse".
+    /// </summary>
     public static string GetPathText(this GameLocation location)
     {
         var sb = new StringBuilder();
         AppendLocationText(location, sb);
-        return sb.ToString();
+        var result = sb.ToString();
+        return !string.IsNullOrEmpty(result) ? result : GetSemiUniqueKey(location);
+    }
+
+    /// <summary>
+    /// Gets a "semi-unique" key for a location, e.g. that defines a broad "area" such as Mines or Skull Cavern but not
+    /// the specific floor.
+    /// </summary>
+    public static string GetSemiUniqueKey(this GameLocation location)
+    {
+        var uniqueName = location.NameOrUniqueName;
+        if (location is MineShaft mineShaft)
+        {
+            var mineLevelText = mineShaft.mineLevel.ToString();
+            if (uniqueName.EndsWith(mineLevelText))
+            {
+                uniqueName = uniqueName[..^mineLevelText.Length] + "_" + mineShaft.locationContextId;
+            }
+        }
+        return uniqueName;
     }
 
     private static void AppendLocationText(GameLocation location, StringBuilder sb)
