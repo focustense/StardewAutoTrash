@@ -125,13 +125,14 @@ internal sealed class ModEntry : Mod
         {
             return;
         }
-        // If an item was just recovered, remove its marker flag so that it's not skipped again.
-        foreach (var added in e.Added)
+        // In general, most inventory additions should be just one item and not a whole set, so checking for ANY item
+        // bypassed could leave fewer empty slots than desired. However, it's important to do this to avoid "UI loops"
+        // that seem strange and unintuitive, such as restoring one stack only to have a different stack immediately
+        // ejected, then trying to restore the other stack and losing the first stack again.
+        // Instead we boil it down to: "if this event is part of a recovery, ignore all trash rules until it ends".
+        if (config.MinEmptySlots <= 0 || e.Added.Any(item => item.IsTrashCheckBypassed()))
         {
-            added.tempData?.Remove(InventoryInterceptor.SKIP_TRASH_CHECK_KEY);
-        }
-        if (config.MinEmptySlots <= 0)
-        {
+            RemoveOverrideFlags(e.Added);
             return;
         }
         var inventory = Game1.player.Items;
@@ -159,6 +160,7 @@ internal sealed class ModEntry : Mod
         {
             MaybePlayTrashSound();
         }
+        RemoveOverrideFlags(e.Added);
     }
 
     // Core logic
@@ -205,6 +207,15 @@ internal sealed class ModEntry : Mod
         if (reclamationPrice > 0)
         {
             Game1.player.Money -= reclamationPrice;
+        }
+    }
+
+    private static void RemoveOverrideFlags(IEnumerable<Item> items)
+    {
+        // If an item was just recovered, remove its marker flag so that it's not skipped again.
+        foreach (var item in items)
+        {
+            item.SetTrashCheckBypass(false);
         }
     }
 

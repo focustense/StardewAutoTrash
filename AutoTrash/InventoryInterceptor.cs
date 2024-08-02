@@ -16,12 +16,6 @@ namespace AutoTrash2;
 internal static class InventoryInterceptor
 {
     /// <summary>
-    /// Marker key that, when present in <see cref="Item.tempData"/>, will cause the trash check to be skipped.
-    /// Used to temporarily prevent re-trashing items that are being recovered.
-    /// </summary>
-    public const string SKIP_TRASH_CHECK_KEY = "focustense.AutoTrash2.SkipTrashCheck";
-
-    /// <summary>
     /// Function to get the current mod configuration, usually set by <see cref="ModEntry"/> on initialization.
     /// </summary>
     public static Func<Configuration>? ConfigSelector { get; set; }
@@ -42,7 +36,7 @@ internal static class InventoryInterceptor
         ref bool needsInventorySpace,
         ref bool showNotification)
     {
-        if (item.tempData?.ContainsKey(SKIP_TRASH_CHECK_KEY) == true)
+        if (item.IsTrashCheckBypassed())
         {
             return;
         }

@@ -11,13 +11,10 @@ internal class RecoveryMenu(IList<Item> inventory, Action<Item> onRecoverItem)
         reverseGrab: false,
         showReceivingMenu: true,
         highlightFunction: InventoryMenu.highlightAllItems,
-        behaviorOnItemSelectFunction: (item, _) =>
-            {
-                item.SetTempData(InventoryInterceptor.SKIP_TRASH_CHECK_KEY, true);
-            },
+        behaviorOnItemSelectFunction: (item, _) => item.SetTrashCheckBypass(true),
         behaviorOnItemGrab: (item, _) =>
             {
-                item.SetTempData(InventoryInterceptor.SKIP_TRASH_CHECK_KEY, true);
+                item.SetTrashCheckBypass(true);
                 onRecoverItem(item);
             },
         message: "",
