@@ -41,6 +41,14 @@ internal static class LocationExtensions
                 uniqueName = uniqueName[..^mineLevelText.Length] + "_" + mineShaft.locationContextId;
             }
         }
+        else if (location is VolcanoDungeon volcano)
+        {
+            var volcanoLevelText = volcano.level.Value.ToString();
+            if (uniqueName.EndsWith(volcanoLevelText))
+            {
+                uniqueName = uniqueName[..^volcanoLevelText.Length];
+            }
+        }
         return uniqueName;
     }
 

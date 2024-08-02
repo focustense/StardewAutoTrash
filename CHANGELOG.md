@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Fixed
+
+- Trash filters now carry over properly between different levels of the same mine or volcano dungeon.
+
 ## [0.1.0] - 2024-08-02
 
 ### Added
