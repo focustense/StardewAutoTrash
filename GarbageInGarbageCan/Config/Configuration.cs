@@ -24,6 +24,11 @@ public class Configuration
     public KeybindList MenuKey { get; set; } = new(SButton.G);
 
     /// <summary>
+    /// Sort mode to apply when opening the trashable rules menu.
+    /// </summary>
+    public MenuSortMode MenuSortMode { get; set; }
+
+    /// <summary>
     /// Key to hold down when trashing an item for the first time to make it auto-trashable.
     /// </summary>
     public KeybindList ModifierKey { get; set; } = new(SButton.LeftControl);

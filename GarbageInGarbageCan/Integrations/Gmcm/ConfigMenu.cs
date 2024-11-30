@@ -13,7 +13,7 @@ internal static class ConfigMenu
         Action save
     )
     {
-        if (Apis.Gmcm is not IGenericModConfigMenuApi gmcm)
+        if (Apis.Gmcm is not { } gmcm)
         {
             return;
         }
@@ -71,6 +71,16 @@ internal static class ConfigMenu
             min: 0,
             max: 10,
             formatValue: value => I18n.Options_RecoveryTime_ValueFormat(value)
+        );
+        gmcm.AddSectionTitle(mod, I18n.Options_UI_Heading);
+        gmcm.AddTextOption(
+            mod,
+            name: I18n.Options_UI_SortMode_Label,
+            tooltip: I18n.Options_UI_SortMode_Tooltip,
+            getValue: () => config().MenuSortMode.ToString(),
+            setValue: value => config().MenuSortMode = Enum.Parse<MenuSortMode>(value),
+            allowedValues: Enum.GetValues<MenuSortMode>().Select(mode => mode.ToString()).ToArray(),
+            formatAllowedValue: value => I18n.GetByKey($"Enum.MenuSortMode.{value}")
         );
     }
 }

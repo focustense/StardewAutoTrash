@@ -26,7 +26,8 @@ public class TrashablesViewModel(Configuration config, TrashData data, GameLocat
     /// <summary>
     /// List of trashable items, and their rules, to display in the grid.
     /// </summary>
-    public IReadOnlyList<TrashItemViewModel> Items { get; } = CreateItemList(data, location);
+    public IReadOnlyList<TrashItemViewModel> Items { get; } =
+        CreateItemList(data, location, config.MenuSortMode);
 
     /// <summary>
     /// Menu title, to be displayed as a banner above the grid or empty text.
@@ -35,7 +36,8 @@ public class TrashablesViewModel(Configuration config, TrashData data, GameLocat
 
     private static IReadOnlyList<TrashItemViewModel> CreateItemList(
         TrashData data,
-        GameLocation location
+        GameLocation location,
+        MenuSortMode sortMode
     )
     {
         string locationKey = location.GetSemiUniqueKey();
@@ -44,6 +46,28 @@ public class TrashablesViewModel(Configuration config, TrashData data, GameLocat
             .Select(ItemRegistry.GetData)
             .Where(itemData => itemData is not null)
             .Select(itemData => new TrashItemViewModel(data, itemData, locationKey, playerId))
+            .OrderByMode(sortMode)
             .ToList();
+    }
+}
+
+file static class ItemViewModelExtensions
+{
+    public static IEnumerable<TrashItemViewModel> OrderByMode(
+        this IEnumerable<TrashItemViewModel> items,
+        MenuSortMode mode
+    )
+    {
+        return mode switch
+        {
+            MenuSortMode.ActiveFirst => items
+                .OrderByDescending(x => x.IsTrash)
+                .ThenBy(x => x.Tooltip.Title),
+            MenuSortMode.ActiveLocalFirst => items
+                .OrderByDescending(x => x.IsLocalTrash)
+                .ThenByDescending(x => x.IsGlobalTrash)
+                .ThenBy(x => x.Tooltip.Title),
+            _ => items.OrderBy(x => x.Tooltip.Title),
+        };
     }
 }
