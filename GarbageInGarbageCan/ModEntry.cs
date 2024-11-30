@@ -82,11 +82,19 @@ internal sealed class ModEntry : Mod
 
     private void GameLoop_SaveLoaded(object? sender, SaveLoadedEventArgs e)
     {
+        if (!Context.IsMainPlayer)
+        {
+            return;
+        }
         currentData = Helper.Data.ReadSaveData<TrashData>(ModManifest.UniqueID) ?? new();
     }
 
     private void GameLoop_Saving(object? sender, SavingEventArgs e)
     {
+        if (!Context.IsMainPlayer)
+        {
+            return;
+        }
         Helper.Data.WriteSaveData(ModManifest.UniqueID, currentData);
     }
 
