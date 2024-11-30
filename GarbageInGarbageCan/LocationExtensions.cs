@@ -54,25 +54,26 @@ internal static class LocationExtensions
 
     private static void AppendLocationText(GameLocation location, StringBuilder sb)
     {
-        if (location.GetContainingBuilding() is Building building
-            && building.GetData() is BuildingData buildingData)
+        if (location.ParentBuilding is { } building && building.GetData() is { } buildingData)
         {
-            if (building.GetParentLocation() is GameLocation buildingParentLocation)
+            if (building.GetParentLocation() is { } buildingParentLocation)
             {
                 AppendLocationText(buildingParentLocation, sb);
             }
             AppendSeparatorIfNonEmpty(sb);
             sb.Append(TokenParser.ParseText(buildingData.Name));
         }
-        else if (location.GetParentLocation() is GameLocation parentLocation)
+        else if (location.GetParentLocation() is { } parentLocation)
         {
             AppendLocationText(parentLocation, sb);
         }
 
         // GameLocation.DisplayName automatically falls back to the parent DisplayName if this location doesn't have its
         // own. But we don't want this, as it will get duplicated, so we use the raw location data instead.
-        if (location.GetData() is LocationData locationData
-            && !string.IsNullOrEmpty(locationData.DisplayName))
+        if (
+            location.GetData() is { } locationData
+            && !string.IsNullOrEmpty(locationData.DisplayName)
+        )
         {
             AppendSeparatorIfNonEmpty(sb);
             sb.Append(TokenParser.ParseText(locationData.DisplayName));
