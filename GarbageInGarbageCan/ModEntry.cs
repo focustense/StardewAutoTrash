@@ -13,7 +13,7 @@ namespace AutoTrash2;
 
 internal sealed class ModEntry : Mod
 {
-    private static readonly TimeSpan MIN_TRASH_SOUND_INTERVAL = TimeSpan.FromSeconds(1);
+    private static readonly TimeSpan MinTrashSoundInterval = TimeSpan.FromSeconds(1);
 
     // Initialized in Entry
     private Configuration config = null!;
@@ -44,16 +44,29 @@ internal sealed class ModEntry : Mod
         harmony = new(ModManifest.UniqueID);
         harmony.Patch(
             original: AccessTools.Method(typeof(Utility), nameof(Utility.trashItem)),
-            postfix: new(typeof(TrashDetector), nameof(TrashDetector.Utility_trashItem_Postfix)));
+            postfix: new(typeof(TrashDetector), nameof(TrashDetector.Utility_trashItem_Postfix))
+        );
         harmony.Patch(
             original: AccessTools.Method(typeof(Farmer), nameof(Farmer.GetItemReceiveBehavior)),
             postfix: new(
                 typeof(InventoryInterceptor),
-                nameof(InventoryInterceptor.Farmer_GetItemReceiveBehavior_Postfix)));
+                nameof(InventoryInterceptor.Farmer_GetItemReceiveBehavior_Postfix)
+            )
+        );
         harmony.Patch(
-            original: AccessTools.Method(typeof(InventoryPage), nameof(InventoryPage.receiveLeftClick)),
-            prefix: new(typeof(TrashDetector), nameof(TrashDetector.InventoryPage_receiveLeftClick_Prefix)),
-            postfix: new(typeof(TrashDetector), nameof(TrashDetector.InventoryPage_receiveLeftClick_Postfix)));
+            original: AccessTools.Method(
+                typeof(InventoryPage),
+                nameof(InventoryPage.receiveLeftClick)
+            ),
+            prefix: new(
+                typeof(TrashDetector),
+                nameof(TrashDetector.InventoryPage_receiveLeftClick_Prefix)
+            ),
+            postfix: new(
+                typeof(TrashDetector),
+                nameof(TrashDetector.InventoryPage_receiveLeftClick_Postfix)
+            )
+        );
     }
 
     private void GameLoop_GameLaunched(object? sender, GameLaunchedEventArgs e)
@@ -198,19 +211,21 @@ internal sealed class ModEntry : Mod
         {
             // Unlike the notification in TrackTrashedItems, we actually want to use the specific name of the item here
             // since that is the actual item being discarded, not just the filter criteria.
-            Game1.addHUDMessage(new(I18n.Hud_ItemTrashed(item.DisplayName))
-            {
-                type = $"AutoTrash_{item.Name}",
-                messageSubject = item,
-                number = item.Stack,
-            });
+            Game1.addHUDMessage(
+                new(I18n.Hud_ItemTrashed(item.DisplayName))
+                {
+                    type = $"AutoTrash_{item.Name}",
+                    messageSubject = item,
+                    number = item.Stack,
+                }
+            );
         }
     }
 
     private void MaybePlayTrashSound()
     {
         var gameTime = Game1.currentGameTime.TotalGameTime;
-        if (gameTime - lastTrashSoundTime >= MIN_TRASH_SOUND_INTERVAL)
+        if (gameTime - lastTrashSoundTime >= MinTrashSoundInterval)
         {
             Game1.playSound("trashcan");
             lastTrashSoundTime = gameTime;
@@ -267,11 +282,13 @@ internal sealed class ModEntry : Mod
             // The item's display name could be more specific than the item ID, and we don't want to confuse the player.
             // Use the generic name for any item with that ID.
             var itemName = ItemRegistry.Create(item.QualifiedItemId).DisplayName;
-            Game1.addHUDMessage(new(I18n.Hud_ItemFlagged(itemName))
-            {
-                type = $"TrashDetected_{item.Name}",
-                messageSubject = item
-            });
+            Game1.addHUDMessage(
+                new(I18n.Hud_ItemFlagged(itemName))
+                {
+                    type = $"TrashDetected_{item.Name}",
+                    messageSubject = item,
+                }
+            );
         }
         TrashDetector.DetectedItems.Clear();
     }

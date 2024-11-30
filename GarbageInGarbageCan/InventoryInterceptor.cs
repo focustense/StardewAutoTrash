@@ -34,7 +34,8 @@ internal static class InventoryInterceptor
     public static void Farmer_GetItemReceiveBehavior_Postfix(
         Item item,
         ref bool needsInventorySpace,
-        ref bool showNotification)
+        ref bool showNotification
+    )
     {
         if (item.IsTrashCheckBypassed())
         {
@@ -47,7 +48,10 @@ internal static class InventoryInterceptor
             return;
         }
         var locationKey = Game1.currentLocation.GetSemiUniqueKey();
-        if (data.IsTrash(locationKey, item.QualifiedItemId) && !IsAllowedByEmptySlotRule(item, config.MinEmptySlots))
+        if (
+            data.IsTrash(locationKey, item.QualifiedItemId)
+            && !IsAllowedByEmptySlotRule(item, config.MinEmptySlots)
+        )
         {
             // Farmer has many different "addItemToInventory" methods but they all have similar logic, in which they
             // check the result of needsInventorySpace and go directly to OnItemReceived if it's false, skipping all the
@@ -91,8 +95,8 @@ internal static class InventoryInterceptor
         // Otherwise, we have to check existing stacks to see if this item would result in occupying another slot.
         // Note, this allows continuous stacking of trash items even while the available slot count might already be
         // below the limit; we expect the explicit freeing-up to be done by the InventoryChanged handler in ModEntry.
-        var availableStack = Game1.player.Items
-            .Where(i => i?.canStackWith(item) == true)
+        var availableStack = Game1
+            .player.Items.Where(i => i?.canStackWith(item) == true)
             .Sum(i => i.maximumStackSize() - i.Stack);
         return item.Stack <= availableStack;
     }

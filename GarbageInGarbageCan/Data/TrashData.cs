@@ -23,8 +23,8 @@ public class TrashData
     /// </remarks>
     public IEnumerable<string> GetAllItemIds()
     {
-        return GlobalFilter.ItemIds
-            .Concat(FiltersByLocationName.Values.SelectMany(filter => filter.ItemIds))
+        return GlobalFilter
+            .ItemIds.Concat(FiltersByLocationName.Values.SelectMany(filter => filter.ItemIds))
             .Distinct();
     }
 
@@ -48,7 +48,10 @@ public class TrashData
     public bool IsTrash(string locationName, string itemId)
     {
         return GlobalFilter.ItemIds.Contains(itemId)
-            || (FiltersByLocationName.TryGetValue(locationName, out var filter) && filter.ItemIds.Contains(itemId));
+            || (
+                FiltersByLocationName.TryGetValue(locationName, out var filter)
+                && filter.ItemIds.Contains(itemId)
+            );
     }
 
     /// <summary>
@@ -59,7 +62,7 @@ public class TrashData
     /// this on and off won't erase previous location settings.
     /// </remarks>
     /// <param name="itemId">Qualified ID of the item to flag.</param>
-    /// <param name="isTrash">Whether or not item's with the specified <paramref name="itemId"/> should be considered
+    /// <param name="isTrash">Whether items with the specified <paramref name="itemId"/> should be considered
     /// trash.</param>
     public void SetGlobalTrashFlag(string itemId, bool isTrash)
     {
@@ -78,7 +81,7 @@ public class TrashData
     /// </summary>
     /// <param name="locationName">The unique location name.</param>
     /// <param name="itemId">Qualified ID of the item to flag.</param>
-    /// <param name="isTrash">Whether or not item's with the specified <paramref name="itemId"/> should be considered
+    /// <param name="isTrash">Whether items with the specified <paramref name="itemId"/> should be considered
     /// trash.</param>
     public void SetTrashFlag(string locationName, string itemId, bool isTrash)
     {

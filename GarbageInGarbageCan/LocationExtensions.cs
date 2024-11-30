@@ -1,10 +1,7 @@
-﻿using StardewValley;
-using StardewValley.Buildings;
-using StardewValley.GameData.Buildings;
-using StardewValley.GameData.Locations;
+﻿using System.Text;
+using StardewValley;
 using StardewValley.Locations;
 using StardewValley.TokenizableStrings;
-using System.Text;
 
 namespace AutoTrash2;
 
@@ -13,7 +10,7 @@ namespace AutoTrash2;
 /// </summary>
 internal static class LocationExtensions
 {
-    private const string NameSeparator = " > ";
+    private const string NAME_SEPARATOR = " > ";
 
     /// <summary>
     /// Formats the full hierarchical path of a location, e.g. "Johnson Farm > Farmhouse".
@@ -38,7 +35,8 @@ internal static class LocationExtensions
             var mineLevelText = mineShaft.mineLevel.ToString();
             if (uniqueName.EndsWith(mineLevelText))
             {
-                uniqueName = uniqueName[..^mineLevelText.Length] + "_" + mineShaft.locationContextId;
+                uniqueName =
+                    uniqueName[..^mineLevelText.Length] + "_" + mineShaft.locationContextId;
             }
         }
         else if (location is VolcanoDungeon volcano)
@@ -84,7 +82,7 @@ internal static class LocationExtensions
     {
         if (sb.Length > 0)
         {
-            sb.Append(NameSeparator);
+            sb.Append(NAME_SEPARATOR);
         }
     }
 }

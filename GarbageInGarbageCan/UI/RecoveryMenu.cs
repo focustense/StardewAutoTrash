@@ -13,12 +13,13 @@ internal class RecoveryMenu(IList<Item> inventory, Action<Item> onRecoverItem)
         highlightFunction: InventoryMenu.highlightAllItems,
         behaviorOnItemSelectFunction: (item, _) => item.SetTrashCheckBypass(true),
         behaviorOnItemGrab: (item, _) =>
-            {
-                item.SetTrashCheckBypass(true);
-                onRecoverItem(item);
-            },
+        {
+            item.SetTrashCheckBypass(true);
+            onRecoverItem(item);
+        },
         message: "",
-        canBeExitedWithKey: true)
+        canBeExitedWithKey: true
+    )
 {
     public override void draw(SpriteBatch b)
     {
@@ -33,6 +34,7 @@ internal class RecoveryMenu(IList<Item> inventory, Action<Item> onRecoverItem)
             b,
             title,
             xPositionOnScreen + width / 2,
-            yPositionOnScreen - yOffset);
+            yPositionOnScreen - yOffset
+        );
     }
 }

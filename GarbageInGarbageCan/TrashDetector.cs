@@ -45,7 +45,8 @@ internal static class TrashDetector
         int x,
         int y,
         ref Item __state,
-        ref ClickableTextureComponent ___trashCan)
+        ref ClickableTextureComponent ___trashCan
+    )
     {
         if (Detecting && ___trashCan.containsPoint(x, y) && __state is null)
         {

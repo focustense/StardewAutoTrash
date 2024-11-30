@@ -1,5 +1,5 @@
-﻿using StardewValley;
-using System.Collections;
+﻿using System.Collections;
+using StardewValley;
 
 namespace AutoTrash2.Data;
 
@@ -102,7 +102,9 @@ internal class RecoveryBin(Func<TimeSpan> maxAge)
 
         public void Add(Item item)
         {
-            throw new InvalidOperationException("Items cannot be directly added to recently-trashed list.");
+            throw new InvalidOperationException(
+                "Items cannot be directly added to recently-trashed list."
+            );
         }
 
         public void Clear()
@@ -142,7 +144,9 @@ internal class RecoveryBin(Func<TimeSpan> maxAge)
 
         public void Insert(int index, Item item)
         {
-            throw new InvalidOperationException("Items cannot be directly inserted into recently-trashed list.");
+            throw new InvalidOperationException(
+                "Items cannot be directly inserted into recently-trashed list."
+            );
         }
 
         public bool Remove(Item item)
