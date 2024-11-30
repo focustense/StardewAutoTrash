@@ -41,11 +41,13 @@ public partial class TrashItemViewModel(
     /// <summary>
     /// Whether the item is part of any trash rules, global or per-location.
     /// </summary>
+    [DependsOn(nameof(IsGlobalTrash), nameof(IsLocalTrash))]
     public bool IsTrash => IsGlobalTrash || IsLocalTrash;
 
     /// <summary>
     /// Opacity of the shadow displayed for the item image.
     /// </summary>
+    [DependsOn(nameof(IsTrash))]
     public float ShadowAlpha => IsTrash ? 0.5f : 0.05f;
 
     /// <summary>
@@ -57,6 +59,7 @@ public partial class TrashItemViewModel(
     /// <summary>
     /// Tint color to apply to the <see cref="Sprite"/> image.
     /// </summary>
+    [DependsOn(nameof(IsTrash))]
     public Color Tint => IsTrash ? Color.White : Color.White * 0.5f;
 
     /// <summary>
