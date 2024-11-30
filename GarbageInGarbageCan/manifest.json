@@ -1,4 +1,5 @@
 ﻿{
+  "$schema": "https://smapi.io/schemas/manifest.json",
   "Name": "Garbage In Garbage Can",
   "Author": "focustense",
   "Version": "0.1.1",
@@ -7,10 +8,15 @@
   "EntryDll": "GarbageInGarbageCan.dll",
   "Dependencies": [
     {
+      "UniqueID": "focustense.StardewUI",
+      "IsRequired": true
+    },
+    {
       "UniqueID": "spacechase0.GenericModConfigMenu",
       "IsRequired": false
     }
   ],
-  "MinimumApiVersion": "4.0.5",
+  "MinimumApiVersion": "4.1.7",
+  "MinimumGameVersion": "1.6.14",
   "UpdateKeys": [ "Nexus:26607", "GitHub:focustense/StardewAutoTrash" ]
 }

@@ -3,12 +3,12 @@
 /// <summary>
 /// Root for savegame data.
 /// </summary>
-internal class TrashData
+public class TrashData
 {
     /// <summary>
     /// Location-specific filters, only applicable when the player is in that location.
     /// </summary>
-    public Dictionary<string, TrashFilter> FiltersByLocationName = [];
+    public Dictionary<string, TrashFilter> FiltersByLocationName { get; set; } = [];
 
     /// <summary>
     /// Filter applicable at all times, regardless of current location.
@@ -29,7 +29,17 @@ internal class TrashData
     }
 
     /// <summary>
-    /// Checks whether or not a given item is considered trash.
+    /// Checks if the data is empty, i.e. has no trashable items either globally or for any location.
+    /// </summary>
+    /// <returns><c>true</c> if there are no trashables defined anywhere, otherwise <c>false</c>.</returns>
+    public bool IsEmpty()
+    {
+        return GlobalFilter.ItemIds.Count == 0
+            || FiltersByLocationName.Values.All(filter => filter.ItemIds.Count == 0);
+    }
+
+    /// <summary>
+    /// Checks whether a given item is considered trash.
     /// </summary>
     /// <param name="locationName">Unique name of the current location.</param>
     /// <param name="itemId">Qualified ID of the item to check.</param>

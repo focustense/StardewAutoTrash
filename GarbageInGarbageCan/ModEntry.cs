@@ -4,10 +4,8 @@ using AutoTrash2.Integrations;
 using AutoTrash2.Integrations.Gmcm;
 using AutoTrash2.UI;
 using HarmonyLib;
-using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
-using StardewUI;
 using StardewValley;
 using StardewValley.Menus;
 
@@ -21,17 +19,15 @@ internal sealed class ModEntry : Mod
     private Configuration config = null!;
     private Harmony harmony = null!;
     private RecoveryBin recoveryBin = null!;
+    private IViewEngine viewEngine = null!;
 
     private TrashData currentData = new();
     private TimeSpan lastTrashSoundTime = TimeSpan.Zero;
 
     public override void Entry(IModHelper helper)
     {
-        Logger.Monitor = Monitor;
-
         I18n.Init(helper.Translation);
         config = helper.ReadConfig<Configuration>();
-        Sprites.ModMenuTexture = helper.ModContent.Load<Texture2D>("assets/menu.png");
 
         recoveryBin = new(() => config.RecoveryLimit);
 
@@ -67,7 +63,19 @@ internal sealed class ModEntry : Mod
             ModManifest,
             config: () => config,
             reset: () => config = new(),
-            save: () => Helper.WriteConfig(config));
+            save: () => Helper.WriteConfig(config)
+        );
+
+        viewEngine =
+            Helper.ModRegistry.GetApi<IViewEngine>("focustense.StardewUI")
+            ?? throw new InvalidOperationException(
+                "StardewUI Framework is not installed; most GIGC functions will be disabled."
+            );
+        viewEngine.RegisterSprites($"Mods/{ModManifest.UniqueID}/Sprites", "assets/sprites");
+        viewEngine.RegisterViews($"Mods/{ModManifest.UniqueID}/Views", "assets/views");
+#if DEBUG
+        viewEngine.EnableHotReloadingWithSourceSync();
+#endif
     }
 
     // Event handlers
@@ -231,7 +239,11 @@ internal sealed class ModEntry : Mod
 
     private void ShowTrashMenu()
     {
-        Game1.activeClickableMenu = new TrashMenu(config, currentData, Game1.currentLocation);
+        var viewModel = new TrashablesViewModel(config, currentData, Game1.currentLocation);
+        Game1.activeClickableMenu = viewEngine.CreateMenuFromAsset(
+            $"Mods/{ModManifest.UniqueID}/Views/Trashables",
+            viewModel
+        );
     }
 
     private void TrackNewTrashables()

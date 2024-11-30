@@ -6,7 +6,7 @@ namespace AutoTrash2.Config;
 /// <summary>
 /// Mod configuration settings.
 /// </summary>
-internal class Configuration
+public class Configuration
 {
     /// <summary>
     /// Whether to display a notification when items are automatically trashed.

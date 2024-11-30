@@ -1,0 +1,13 @@
+{
+  "Sprites": {
+    "TrashOn": {
+      "SourceRect": "0, 0, 9, 9"
+    },
+    "TrashOff": {
+      "SourceRect": "9, 0, 9, 9"
+    },
+    "TrashGlobal": {
+      "SourceRect": "18, 0, 9, 9"
+    }
+  }
+}
