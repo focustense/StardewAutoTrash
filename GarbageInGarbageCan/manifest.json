@@ -2,7 +2,7 @@
   "$schema": "https://smapi.io/schemas/manifest.json",
   "Name": "Garbage In Garbage Can",
   "Author": "focustense",
-  "Version": "0.2.0",
+  "Version": "0.2.1",
   "Description": "Put trash items where they belong, in the trash.",
   "UniqueID": "focustense.GarbageInGarbageCan",
   "EntryDll": "GarbageInGarbageCan.dll",
