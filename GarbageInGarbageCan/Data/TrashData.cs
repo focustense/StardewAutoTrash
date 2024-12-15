@@ -35,7 +35,7 @@ public class TrashData
     public bool IsEmpty()
     {
         return GlobalFilter.ItemIds.Count == 0
-            || FiltersByLocationName.Values.All(filter => filter.ItemIds.Count == 0);
+            && FiltersByLocationName.Values.All(filter => filter.ItemIds.Count == 0);
     }
 
     /// <summary>

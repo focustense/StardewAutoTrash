@@ -23,7 +23,6 @@ Global
 		SolutionGuid = {0DEC9BF7-DD0A-47BB-B138-5B82549B9530}
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		StardewUI\StardewUI.projitems*{d3dbb38b-79af-4b84-b425-1cffdefa7a86}*SharedItemsImports = 13
 		StardewUI\StardewUI.projitems*{d3f21f39-7d80-4be2-b12b-bb1e8fcd7c7b}*SharedItemsImports = 5
 	EndGlobalSection
 EndGlobal
